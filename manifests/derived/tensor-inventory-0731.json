@@ -1,0 +1,195 @@
+{
+  "budgets": {
+    "active_routed_experts_per_token": 6,
+    "decode_routed_expert_bytes_per_token": 3449290752,
+    "formulas": {
+      "decode_routed_expert_bytes_per_token": "routed_expert_unit_bytes * num_experts_per_tok * num_hidden_layers; assumes a cold expert cache and no reuse between consecutive tokens",
+      "non_expert_layer_bytes_all_layers": "sum of every layer-scope tensor that is not a routed expert; the candidate permanently resident VRAM working set",
+      "prefill_routed_expert_bytes_per_full_union_sweep": "routed_expert_unit_bytes * n_routed_experts * num_hidden_layers; upper bound reached once a prefill chunk's routing union covers every expert"
+    },
+    "global_bytes": {
+      "embedding": 1059061760,
+      "hyper_connection": 262164,
+      "norm": 8192,
+      "output_head": 1059061760
+    },
+    "mtp_bytes": 10862838300,
+    "non_expert_layer_bytes_all_layers": 6727565512,
+    "prefill_routed_expert_bytes_per_full_union_sweep": 147169738752,
+    "routed_expert_bytes_all_layers": 147169738752,
+    "routed_expert_bytes_per_layer": 3422552064,
+    "routed_expert_unit_bytes": 13369344,
+    "routed_experts_per_layer": 256
+  },
+  "by_dtype": [
+    {
+      "bytes": 2967134976,
+      "key": "BF16",
+      "tensor_count": 445
+    },
+    {
+      "bytes": 150966520,
+      "key": "F32",
+      "tensor_count": 433
+    },
+    {
+      "bytes": 6304038912,
+      "key": "F8_E4M3",
+      "tensor_count": 390
+    },
+    {
+      "bytes": 9261408000,
+      "key": "F8_E8M0",
+      "tensor_count": 35718
+    },
+    {
+      "bytes": 18616320,
+      "key": "I64",
+      "tensor_count": 3
+    },
+    {
+      "bytes": 148176371712,
+      "key": "I8",
+      "tensor_count": 35328
+    }
+  ],
+  "by_scope_role": [
+    {
+      "bytes": 1059061760,
+      "key": "global/embedding",
+      "tensor_count": 1
+    },
+    {
+      "bytes": 262164,
+      "key": "global/hyper_connection",
+      "tensor_count": 3
+    },
+    {
+      "bytes": 8192,
+      "key": "global/norm",
+      "tensor_count": 1
+    },
+    {
+      "bytes": 1059061760,
+      "key": "global/output_head",
+      "tensor_count": 1
+    },
+    {
+      "bytes": 525722624,
+      "key": "layer/attention_compressor",
+      "tensor_count": 164
+    },
+    {
+      "bytes": 4599478144,
+      "key": "layer/attention_core",
+      "tensor_count": 559
+    },
+    {
+      "bytes": 275353344,
+      "key": "layer/attention_indexer",
+      "tensor_count": 147
+    },
+    {
+      "bytes": 135275592,
+      "key": "layer/hyper_connection",
+      "tensor_count": 258
+    },
+    {
+      "bytes": 704512,
+      "key": "layer/norm",
+      "tensor_count": 86
+    },
+    {
+      "bytes": 147169738752,
+      "key": "layer/routed_expert",
+      "tensor_count": 66048
+    },
+    {
+      "bytes": 108834816,
+      "key": "layer/router",
+      "tensor_count": 86
+    },
+    {
+      "bytes": 1082196480,
+      "key": "layer/shared_expert",
+      "tensor_count": 258
+    },
+    {
+      "bytes": 320893824,
+      "key": "mtp/attention_core",
+      "tensor_count": 39
+    },
+    {
+      "bytes": 9699996,
+      "key": "mtp/hyper_connection",
+      "tensor_count": 21
+    },
+    {
+      "bytes": 8704,
+      "key": "mtp/mtp_confidence_head",
+      "tensor_count": 1
+    },
+    {
+      "bytes": 50342912,
+      "key": "mtp/mtp_input_projection",
+      "tensor_count": 3
+    },
+    {
+      "bytes": 132382720,
+      "key": "mtp/mtp_markov_head",
+      "tensor_count": 2
+    },
+    {
+      "bytes": 57344,
+      "key": "mtp/norm",
+      "tensor_count": 7
+    },
+    {
+      "bytes": 10267656192,
+      "key": "mtp/routed_expert",
+      "tensor_count": 4608
+    },
+    {
+      "bytes": 6294528,
+      "key": "mtp/router",
+      "tensor_count": 6
+    },
+    {
+      "bytes": 75502080,
+      "key": "mtp/shared_expert",
+      "tensor_count": 18
+    }
+  ],
+  "config_facts": {
+    "expert_dtype": "fp4",
+    "hidden_size": 4096,
+    "moe_intermediate_size": 2048,
+    "n_routed_experts": 256,
+    "n_shared_experts": 1,
+    "num_experts_per_tok": 6,
+    "num_hash_layers": 3,
+    "num_hidden_layers": 43,
+    "num_nextn_predict_layers": 1
+  },
+  "derived_from_manifest_sha256": "83f634c8dfab073636bc59cd77cca63695ee5894d2a6f4bacf0c5e24fd57f183",
+  "generated_at_utc": "2026-08-05T18:00:00Z",
+  "model": {
+    "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+    "normative_revision": "9e165c30e2704aec5d9d593cce3eebd58bbef1cb"
+  },
+  "schema_version": "1.0.0",
+  "totals": {
+    "container_overhead_bytes": 7998896,
+    "shard_bytes": 166886535336,
+    "tensor_count": 72317,
+    "tensor_payload_bytes": 166878536440
+  },
+  "verification": {
+    "config_sha256_cross_check": "pass",
+    "manifest_totals_cross_check": "pass",
+    "method": "safetensors_header_range_reads",
+    "shards_read": 48,
+    "weight_index_cross_check": "pass",
+    "weight_payload_downloaded": false
+  }
+}
