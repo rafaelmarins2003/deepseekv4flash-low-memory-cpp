@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rafaelmarins2003/deepseekv4flash-low-memory-engine/manifests/model-manifest.schema.json",
+  "title": "Immutable model artifact manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model",
+    "documentation_snapshot",
+    "audited_at_utc",
+    "source_urls",
+    "release_lineage",
+    "known_upstream_divergences",
+    "prior_release_comparison",
+    "totals",
+    "artifacts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "normative_revision"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "normative_revision": {
+          "$ref": "#/$defs/gitSha1"
+        }
+      }
+    },
+    "documentation_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "scope",
+        "changed_paths",
+        "readme_sha256",
+        "readme_size_bytes",
+        "verification_level"
+      ],
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/gitSha1"
+        },
+        "scope": {
+          "const": "informative_only"
+        },
+        "changed_paths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "uniqueItems": true
+        },
+        "readme_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "readme_size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "verification_level": {
+          "const": "local_bytes"
+        }
+      }
+    },
+    "audited_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "source_urls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentation_commit",
+        "documentation_tree",
+        "dspark_tree",
+        "normative_commit",
+        "normative_tree",
+        "preview_tree"
+      ],
+      "properties": {
+        "documentation_commit": {
+          "$ref": "#/$defs/immutableHuggingFaceUrl"
+        },
+        "documentation_tree": {
+          "$ref": "#/$defs/immutableHuggingFaceUrl"
+        },
+        "dspark_tree": {
+          "$ref": "#/$defs/immutableHuggingFaceUrl"
+        },
+        "normative_commit": {
+          "$ref": "#/$defs/immutableHuggingFaceUrl"
+        },
+        "normative_tree": {
+          "$ref": "#/$defs/immutableHuggingFaceUrl"
+        },
+        "preview_tree": {
+          "$ref": "#/$defs/immutableHuggingFaceUrl"
+        }
+      }
+    },
+    "release_lineage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "revision",
+          "parent_revision",
+          "title",
+          "author_date_utc",
+          "committer_date_utc",
+          "source_url"
+        ],
+        "properties": {
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "$ref": "#/$defs/gitSha1"
+          },
+          "parent_revision": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/gitSha1"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "author_date_utc": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "committer_date_utc": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "Z$"
+          },
+          "source_url": {
+            "$ref": "#/$defs/immutableHuggingFaceUrl"
+          }
+        }
+      }
+    },
+    "known_upstream_divergences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "summary",
+          "status",
+          "handoff",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "handoff": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "selector",
+                "value"
+              ],
+              "properties": {
+                "path": {
+                  "$ref": "#/$defs/relativePath"
+                },
+                "selector": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "prior_release_comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preview",
+        "dspark"
+      ],
+      "properties": {
+        "preview": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/baseComparison"
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        "dspark": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/baseComparison"
+            },
+            {
+              "type": "object",
+              "required": [
+                "config_matches_normative",
+                "matching_weight_sha256_count",
+                "matching_weight_size_count",
+                "non_weight_changed_paths"
+              ],
+              "properties": {
+                "config_matches_normative": {
+                  "type": "boolean"
+                },
+                "matching_weight_sha256_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "matching_weight_size_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "non_weight_changed_paths": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/relativePath"
+                  },
+                  "uniqueItems": true
+                }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        }
+      }
+    },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_count",
+        "weight_shard_count",
+        "non_weight_artifact_count",
+        "weight_shard_bytes",
+        "weight_tensor_bytes",
+        "weight_tensor_count",
+        "weight_container_overhead_bytes",
+        "total_bytes"
+      ],
+      "properties": {
+        "artifact_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "weight_shard_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "non_weight_artifact_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_shard_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_tensor_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_tensor_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_container_overhead_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "role",
+          "size_bytes",
+          "sha256",
+          "verification_level",
+          "upstream_objects",
+          "source_url"
+        ],
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "verification_level": {
+            "enum": [
+              "upstream_metadata",
+              "local_bytes"
+            ]
+          },
+          "upstream_objects": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "kind",
+                "algorithm",
+                "value"
+              ],
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "algorithm": {
+                  "enum": [
+                    "sha1",
+                    "sha256"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]+$"
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "algorithm": {
+                        "const": "sha1"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "value": {
+                        "$ref": "#/$defs/gitSha1"
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "algorithm": {
+                        "const": "sha256"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "value": {
+                        "$ref": "#/$defs/sha256"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "source_url": {
+            "$ref": "#/$defs/immutableHuggingFaceUrl"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "gitSha1": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*//)(?!\\.{1,2}(?:/|$))(?!.*[/]\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*[/]$).+$"
+    },
+    "immutableHuggingFaceUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://huggingface\\.co/[^/?#]+/[^/?#]+/(?:commit|resolve|tree)/[0-9a-f]{40}(?:/[^?#]+)?$"
+    },
+    "baseComparison": {
+      "type": "object",
+      "required": [
+        "model_id",
+        "revision",
+        "artifact_count",
+        "weight_shard_count",
+        "weight_shard_bytes",
+        "summary"
+      ],
+      "properties": {
+        "model_id": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "revision": {
+          "$ref": "#/$defs/gitSha1"
+        },
+        "artifact_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_shard_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_shard_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
